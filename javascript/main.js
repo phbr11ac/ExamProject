@@ -24,10 +24,8 @@ Things to do:
 -- PB: I'm not sure whether the createUser() should be added to the User class. It's basically one line of code
 
 To do Thursday:
--- Line 52 in overview.js: How to push electives array onto savedRatings array and saving to localStorage.
 -- How to move code from main to User class?
 -- Move (*) from overview.js to Rating class.
--- Line 28 (**) in overview.js: remove window.onload to be able to use savedRatings array from the beginning
 -- Line 77 in overview.js: Only save ratings when submit button is pushed. Remove blur thingy.
 
 100) Renaming all the text inside website
@@ -54,5 +52,9 @@ DONE:
 
 9) (DONE) Check for CBS email (M)
 -- PB: This has been done
+
+
+-- (DONE) Line 28 (**) in overview.js: remove window.onload to be able to use savedRatings array from the beginning
+-- (DONE) Line 52 in overview.js: How to push electives array onto savedRatings array and saving to localStorage.
 
 */

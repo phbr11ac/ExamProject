@@ -13,12 +13,12 @@ class Elective {
       this.ratingCriterias = []; 
     }
 // Add criteria into the ratingCriteria array
-  addRatingCriteria(criteria){
+  addRatingCriteria(criteria) {
     this.ratingCriterias.push(criteria);
   }
   
 // Generate table to input ratings based on ratingCriterias and electives
-  generateEditTable(){
+  generateEditTable() {
     var headerHTML = "<table><tr><th>" + this.electiveName + "</th>";
     var rowHTML = "";
 
@@ -47,18 +47,18 @@ class Elective {
   }
 
 // Calculate the electives' ratingCriteria average
-  calculateElectiveAvg(){
+  calculateElectiveAvg() {
     var sum = 0;
 
     for (i = 0; i < this.ratingCriterias.length; i++) {
-      sum = sum + this.ratingCriterias[i].calculateRatingCriteriaAvg();
+      sum += this.ratingCriterias[i].calculateRatingCriteriaAvg();
     }
-    return sum / this.ratingCriterias.length;
+    return Math.floor((sum / this.ratingCriterias.length)*100)/100;
   }
 }
 
 class RatingCriteria {
-  constructor(criteriaName){
+  constructor(criteriaName) {
     this.criteriaName = criteriaName;
     this.ratings = [];
   }
@@ -67,9 +67,12 @@ class RatingCriteria {
   calculateRatingCriteriaAvg() {
     var sum = 0;
     for (const rating of this.ratings) {
-      sum = sum + rating.ratingValue;
+      sum += rating.ratingValue;
     }
-    var avg = sum / this.ratings.length;
+
+    // Array.reduce()
+
+    var avg = Math.floor((sum / this.ratings.length)*100)/100; // variable that get immediately returned
     return avg;
   }
 
