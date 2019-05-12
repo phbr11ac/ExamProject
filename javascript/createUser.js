@@ -1,3 +1,5 @@
+// This page enables the user creation
+
 const firstNameUI = document.getElementById('firstname')
 const lastNameUI = document.getElementById('lastname')
 const usernameUI = document.getElementById('username')
@@ -5,7 +7,7 @@ const passwordUI = document.getElementById('password')
 const checkboxUI = document.getElementById('terms')
 const submitBtnUI = document.getElementById('submit-btn')
 const resultSpanUI = document.getElementById('resultSpan')
-const pattern = /^\"?[\w-_\.]*\"?@student.cbs\.dk$/
+const pattern = /^\"?[\w-_\.]*\"?@student.cbs\.dk$/ // RegExp to find the pattern @student.cbs.dk
 
 submitBtnUI.onclick = function () {
   if (checkboxUI.checked) {

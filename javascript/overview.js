@@ -1,18 +1,30 @@
-// Array of all the criteria
-const ratingCriterias = [
-  new RatingCriteria("Friendliness"),
-  new RatingCriteria("Humor"),
-  new RatingCriteria("Techiness")
-];
+// This page is responsible for the rating system and calculating the averages
 
-// Array of all the electives
+// The master array (First layer)
 const electives = [
   new Elective("T1"),
   new Elective("P1"),
   new Elective("B1")
 ];
 
-// Loading the current user (*)
+// Array of all the criteria. Input for the second layer of electives
+const ratingCriterias = [
+  new RatingCriteria("Friendliness"),
+  new RatingCriteria("Humor"),
+  new RatingCriteria("Techiness"),
+  new RatingCriteria("Tst")
+];
+
+// Creation of the second layer - pushing all ratingCriterias to each of the electives
+for (i = 0; i < electives.length; i++) {
+  for (u = 0; u < ratingCriterias.length; u++) {
+    electives[i].addRatingCriteria(new RatingCriteria(ratingCriterias[u].criteriaName));
+  }
+}
+
+/* BLOCK OF CODE FOR THE ELEMENTS ON THE WEBSITE */
+
+// Loading the current user
 currentUser = JSON.parse(localStorage.getItem('currentUser'));
 if (currentUser === null) {
   alert("You need to login")
@@ -52,25 +64,6 @@ else {
   }
 }
 
-function saveToLocalStorage(arrayName) {
-  for (let i = 0; i < electives.length; i++) {
-    for (let u = 0; u < ratingCriterias.length; u++) {
-      if (electives[i].ratingCriterias[u].ratings.length > 0 && electives[i].ratingCriterias[u].ratings !== undefined) {
-        arrayName[i].ratingCriterias[u].ratings.push(electives[i].ratingCriterias[u].ratings[0])  // does ratings acutally need to be an array on our eletive 
-      }
-    }
-  }
-  localStorage.setItem('overallratings', JSON.stringify(arrayName));
-  document.location.reload(true)
-}
-
-// Adding all the ratingCriterias to electives
-for (i = 0; i < electives.length; i++) {
-  for (u = 0; u < ratingCriterias.length; u++) {
-    electives[i].addRatingCriteria(new RatingCriteria(ratingCriterias[u].criteriaName));
-  }
-}
-
 // Generate the input tables
 var inputTable = "";
 
@@ -79,22 +72,27 @@ for (const elective of electives) {
 }
 document.getElementById('tableContent').innerHTML = inputTable;
 
-// To push inputs in ratings array
+// Generate the fixed tables with average values  
+var fixedTable = "";
+for (const savedRating of savedRatings) {
+  fixedTable += savedRating.generateFixedTable()
+}
+document.getElementById('tableContentFixed').innerHTML = fixedTable;
+
+/* END OF BLOCK */
+
+// Creation of the third layer - pushing the ratings to the respective rating criteria
 let inputs = document.getElementsByClassName("inputbox");
 
 for (const input of inputs) {
   input.addEventListener("blur", function (event) {
-    var electiveValue = event.target.dataset.elective;
-    var ratingCriteriaValue = event.target.dataset.ratingcriteria;
+    var tableElectiveName = event.target.dataset.elective;
+    var tableRatingCriteriaName = event.target.dataset.ratingcriteria;
 
     for (const elective of electives) {
-      if (elective.electiveName != electiveValue) {
-        continue;
-      } else {
+      if (elective.electiveName == tableElectiveName) {
         for (const ratingCriteria of elective.ratingCriterias) {
-          if (ratingCriteria.criteriaName != ratingCriteriaValue) {
-            continue;
-          } else {
+          if (ratingCriteria.criteriaName == tableRatingCriteriaName) {
             if (event.target.value.length > 0 && event.target.value.length < 2) {
               let jsonUser = JSON.parse(localStorage.getItem('currentUser'));
               let user = new User(jsonUser.firstName, jsonUser.lastName, jsonUser.username, jsonUser.password);
@@ -107,9 +105,22 @@ for (const input of inputs) {
   });
 }
 
-// Generate the fixed tables with average values  
-var fixedTable = "";
-for (const savedRating of savedRatings) {
-  fixedTable += savedRating.generateFixedTable()
+// Function to save arrays to localStorage that behaves differently for savedRatings
+function saveToLocalStorage(arrayName) {
+  for (let i = 0; i < electives.length; i++) {
+    for (let u = 0; u < ratingCriterias.length; u++) {
+      if (electives[i].ratingCriterias[u].ratings.length > 0 && electives[i].ratingCriterias[u].ratings !== undefined) {
+        if (arrayName == savedRatings) {
+          arrayName[i].ratingCriterias[u].ratings.push(electives[i].ratingCriterias[u].ratings[0])
+          localStorage.setItem('overallratings', JSON.stringify(arrayName));
+        }
+        else {
+          localStorage.setItem('overallratings', JSON.stringify(arrayName));
+        }
+      }
+    }
+  }
+  document.location.reload(true)
 }
-document.getElementById('tableContentFixed').innerHTML = fixedTable; 
+
+console.log(savedRatings)

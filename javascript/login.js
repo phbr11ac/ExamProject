@@ -1,30 +1,25 @@
+// This page enables the login function
+
 // To check if student already logged it
 if (localStorage.getItem('currentUser') !== null) {
     window.location.assign("./overview.html")
 }
 
+// A button to forward a user to the createuser.html
 adduser.onclick = function () {
     window.location.assign("./createUser.html")
 }
 
 // Defining variables to be used in a later change of the code
-var count = 0
+let count = 0
 const resultSpanUI = document.getElementById('resultSpan')
 const loginUsername = document.getElementById('loginusername')
 const loginPassword = document.getElementById('loginpassword')
 
-// Enables login by pressing enter inside the loginpassword box
-document.getElementById("loginpassword").addEventListener("keyup", function (event) {
-    event.preventDefault();
-    if (event.keyCode === 13) {
-        login.onclick();
-    }
-});
-
 // Login function
 login.onclick = function () {
-    var inputUsername = loginUsername.value;
-    var inputPassword = loginPassword.value;
+    let inputUsername = loginUsername.value;
+    let inputPassword = loginPassword.value;
 
     if (inputPassword.length < 1 || inputUsername.length < 1) {
         resultSpanUI.innerText = "You should input something";

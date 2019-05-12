@@ -1,3 +1,6 @@
+// This page constructs all the classes used in the program
+
+// THE FOLLOWING BLOCK IS FOR THE USER CLASS
 class User {
   constructor(firstName, lastName, username, password) {
     this.firstName = firstName;
@@ -7,6 +10,9 @@ class User {
   }
 }
 
+// END BLOCK
+
+// THE FOLLOWING BLOCK IS FOR THE ELECTIVE CLASS
 class Elective {
   constructor(electiveName) {
     this.electiveName = electiveName;
@@ -16,7 +22,6 @@ class Elective {
   addRatingCriteria(criteria) {
     this.ratingCriterias.push(criteria);
   }
-
   // Generate table to input ratings based on ratingCriterias and electives
   generateEditTable() {
     var headerHTML = "<table><tr><th>" + this.electiveName + "</th>";
@@ -24,14 +29,13 @@ class Elective {
 
     for (const ratingCriteria of this.ratingCriterias) {
       headerHTML += "<th>" + ratingCriteria.criteriaName + "</th>";
-      rowHTML += "<td><input type='number' class='inputbox' pattern='[1-5]{1}' data-elective='" + this.electiveName + "' data-ratingcriteria='" + ratingCriteria.criteriaName + "' /></td>"
+      // The data-elective and data-ratingcriteria are used in line 86-87 in overview.js
+      rowHTML += "<td><input type='number' class='inputbox' data-elective='" + this.electiveName + "' data-ratingcriteria='" + ratingCriteria.criteriaName + "' /></td>"
     }
-    // The data-elective and data-ratingcriteria are used for specifying what input field the value is typed in
     headerHTML += "</tr>";
     headerHTML += "<tr><td></td>" + rowHTML + "</tr><br>";
     return headerHTML;
   }
-
   // Generate table with the average ratings and the overall ratings
   generateFixedTable() {
     var fixedHeaderHTML = "<table><tr><th>" + this.electiveName + "</th>";
@@ -45,11 +49,9 @@ class Elective {
     fixedHeaderHTML += "<tr><td>" + this.calculateElectiveAvg() + "</td>" + fixedRowHTML + "</tr><br>";
     return fixedHeaderHTML;
   }
-
   // Calculate the electives' ratingCriteria average
   calculateElectiveAvg() {
     var sum = 0;
-
     for (i = 0; i < this.ratingCriterias.length; i++) {
       sum += this.ratingCriterias[i].calculateRatingCriteriaAvg();
     }
@@ -57,25 +59,23 @@ class Elective {
   }
 }
 
+// END BLOCK
+
+// THE FOLLOWING BLOCK IS FOR THE RATINGCRITERIA CLASS
 class RatingCriteria {
   constructor(criteriaName) {
     this.criteriaName = criteriaName;
     this.ratings = [];
   }
-
   // Calculate the ratingCriteria average
   calculateRatingCriteriaAvg() {
     var sum = 0;
     for (const rating of this.ratings) {
       sum += rating.ratingValue;
     }
-
-    // Array.reduce()
-
     var avg = Math.floor((sum / this.ratings.length) * 100) / 100; // variable that get immediately returned
     return avg;
   }
-
   // Checks if the userRating is valid and push it into the rating's array
   addRating(userRating) {
     userRating.ratingValue = parseInt(userRating.ratingValue) // Converting value to number
@@ -89,10 +89,14 @@ class RatingCriteria {
   }
 }
 
-// Class for adding ratings to the "database"
+// END BLOCK
+
+// THE FOLLOWING BLOCK IS FOR THE RATING CLASS
 class Rating {
   constructor(user, ratingValue) {
     this.user = user;
     this.ratingValue = ratingValue;
   }
 }
+
+// END BLOCK
