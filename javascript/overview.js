@@ -8,17 +8,12 @@ const electives = [
 ];
 
 // Array of all the criteria. Input for the second layer of electives
-const ratingCriterias = [
-  new RatingCriteria("Friendliness"),
-  new RatingCriteria("Humor"),
-  new RatingCriteria("Techiness"),
-  new RatingCriteria("Tst")
-];
+const ratingCriterias = ["Friendless", "Humor", "Techiness"]
 
 // Creation of the second layer - pushing all ratingCriterias to each of the electives
 for (i = 0; i < electives.length; i++) {
   for (u = 0; u < ratingCriterias.length; u++) {
-    electives[i].addRatingCriteria(new RatingCriteria(ratingCriterias[u].criteriaName));
+    electives[i].addRatingCriteria(new RatingCriteria(ratingCriterias[u]));
   }
 }
 
@@ -122,5 +117,3 @@ function saveToLocalStorage(arrayName) {
   }
   document.location.reload(true)
 }
-
-console.log(savedRatings)
