@@ -8,7 +8,7 @@ const electives = [
 ];
 
 // Array of all the criteria. Input for the second layer of electives
-const ratingCriterias = ["Friendless", "Humor", "Techiness"]
+const ratingCriterias = ["Friendliness", "Humor", "Techiness"]
 
 // Creation of the second layer - pushing all ratingCriterias to each of the electives
 for (i = 0; i < electives.length; i++) {
@@ -78,21 +78,20 @@ document.getElementById('tableContentFixed').innerHTML = fixedTable;
 
 // Creation of the third layer - pushing the ratings to the respective rating criteria
 let inputs = document.getElementsByClassName("inputbox");
-
+  
 for (const input of inputs) {
   input.addEventListener("blur", function (event) {
     var tableElectiveName = event.target.dataset.elective;
     var tableRatingCriteriaName = event.target.dataset.ratingcriteria;
-
     for (const elective of electives) {
       if (elective.electiveName == tableElectiveName) {
         for (const ratingCriteria of elective.ratingCriterias) {
-          if (ratingCriteria.criteriaName == tableRatingCriteriaName) {
-            if (event.target.value.length > 0 && event.target.value.length < 2) {
-              let jsonUser = JSON.parse(localStorage.getItem('currentUser'));
-              let user = new User(jsonUser.firstName, jsonUser.lastName, jsonUser.username, jsonUser.password);
-              ratingCriteria.addRating(new Rating(user, event.target.value));
-            }
+          if (ratingCriteria.criteriaName == tableRatingCriteriaName
+            && event.target.value.length > 0
+            && event.target.value.length < 2) {
+            let jsonUser = JSON.parse(localStorage.getItem('currentUser'));
+            let user = new User(jsonUser.firstName, jsonUser.lastName, jsonUser.username, jsonUser.password);
+            ratingCriteria.addRating(new Rating(user, event.target.value));
           }
         }
       }

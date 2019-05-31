@@ -24,8 +24,8 @@ class Elective {
   }
   // Generate table to input ratings based on ratingCriterias and electives
   generateEditTable() {
-    var headerHTML = "<table><tr><th>" + this.electiveName + "</th>";
-    var rowHTML = "";
+    let headerHTML = "<table><tr><th>" + this.electiveName + "</th>";
+    let rowHTML = "";
 
     for (const ratingCriteria of this.ratingCriterias) {
       headerHTML += "<th>" + ratingCriteria.criteriaName + "</th>";
@@ -33,30 +33,35 @@ class Elective {
       rowHTML += "<td><input type='number' class='inputbox' data-elective='" + this.electiveName + "' data-ratingcriteria='" + ratingCriteria.criteriaName + "' /></td>"
     }
     headerHTML += "</tr>";
-    headerHTML += "<tr><td></td>" + rowHTML + "</tr><br>";
+    headerHTML += "<tr><td></td>" + rowHTML + "</tr></table><br>";
     return headerHTML;
   }
   // Generate table with the average ratings and the overall ratings
   generateFixedTable() {
-    var fixedHeaderHTML = "<table><tr><th>" + this.electiveName + "</th>";
-    var fixedRowHTML = "";
+    let fixedHeaderHTML = "<table><tr><th>" + this.electiveName + "</th>";
+    let fixedRowHTML = "";
 
     for (const ratingCriteria of this.ratingCriterias) {
       fixedHeaderHTML += "<th>" + ratingCriteria.criteriaName + "</th>";
       fixedRowHTML += "<td>" + ratingCriteria.calculateRatingCriteriaAvg() + "</td>"
     }
     fixedHeaderHTML += "</tr>";
-    fixedHeaderHTML += "<tr><td>" + this.calculateElectiveAvg() + "</td>" + fixedRowHTML + "</tr><br>";
+    fixedHeaderHTML += "<tr><td>" + this.calculateElectiveAvg() + "</td>" + fixedRowHTML + "</tr></table><br>";
     return fixedHeaderHTML;
   }
   // Calculate the electives' ratingCriteria average
   calculateElectiveAvg() {
-    var sum = 0;
+    let sum = 0;
     for (i = 0; i < this.ratingCriterias.length; i++) {
       sum += this.ratingCriterias[i].calculateRatingCriteriaAvg();
     }
+    if (sum > 0) {
     return Math.floor((sum / this.ratingCriterias.length) * 100) / 100;
   }
+  else {
+    return "Not able to calculate average"
+  }
+}
 }
 
 // END BLOCK
@@ -69,22 +74,25 @@ class RatingCriteria {
   }
   // Calculate the ratingCriteria average
   calculateRatingCriteriaAvg() {
-    var sum = 0;
+    let sum = 0;
     for (const rating of this.ratings) {
       sum += rating.ratingValue;
     }
-    var avg = Math.floor((sum / this.ratings.length) * 100) / 100; // variable that get immediately returned
-    return avg;
+    if (sum > 0) {
+    return Math.floor((sum / this.ratings.length) * 100) / 100; // variable that get immediately returned
   }
+  else {
+    return "Not yet rated"
+  }
+}
   // Checks if the userRating is valid and push it into the rating's array
   addRating(userRating) {
     userRating.ratingValue = parseInt(userRating.ratingValue) // Converting value to number
-    if (userRating.ratingValue != "") { //Check if input is not empty
-      if (userRating.ratingValue != NaN) { //Check if input is a number
-        if (userRating.ratingValue > 0 && userRating.ratingValue <= 5) {
-          this.ratings.push(userRating);
-        }
-      }
+    if (userRating.ratingValue != "" 
+    && userRating.ratingValue != NaN 
+    && userRating.ratingValue > 0 
+    && userRating.ratingValue <= 5) { //Check if input is not empty and is a number between 1 and 5
+      this.ratings.push(userRating);
     }
   }
 }
