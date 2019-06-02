@@ -10,6 +10,16 @@ class User {
   }
 }
 
+class Admin extends User {
+  constructor(firstName, lastName, username, password, adminRights) {
+    super(firstName, lastName, username, password);
+    this.adminRights = adminRights;
+  }
+  addElective() {
+    // a method for the admin to add an elective to the electives array
+  }
+}
+
 // END BLOCK
 
 // THE FOLLOWING BLOCK IS FOR THE ELECTIVE CLASS
@@ -24,17 +34,17 @@ class Elective {
   }
   // Generate table to input ratings based on ratingCriterias and electives
   generateEditTable() {
-    let headerHTML = "<table><tr><th>" + this.electiveName + "</th>";
-    let rowHTML = "";
+    let editHeaderHTML = "<table><tr><th>" + this.electiveName + "</th>";
+    let editRowHTML = "";
 
     for (const ratingCriteria of this.ratingCriterias) {
-      headerHTML += "<th>" + ratingCriteria.criteriaName + "</th>";
+      editHeaderHTML += "<th>" + ratingCriteria.criteriaName + "</th>";
       // The data-elective and data-ratingcriteria are used in line 86-87 in overview.js
-      rowHTML += "<td><input type='number' class='inputbox' data-elective='" + this.electiveName + "' data-ratingcriteria='" + ratingCriteria.criteriaName + "' /></td>"
+      editRowHTML += "<td><input type='number' class='inputbox' data-elective='" + this.electiveName + "' data-ratingcriteria='" + ratingCriteria.criteriaName + "' /></td>"
     }
-    headerHTML += "</tr>";
-    headerHTML += "<tr><td></td>" + rowHTML + "</tr></table><br>";
-    return headerHTML;
+    editHeaderHTML += "</tr>";
+    editHeaderHTML += "<tr><td></td>" + editRowHTML + "</tr></table><br>";
+    return editHeaderHTML;
   }
   // Generate table with the average ratings and the overall ratings
   generateFixedTable() {
@@ -56,12 +66,12 @@ class Elective {
       sum += this.ratingCriterias[i].calculateRatingCriteriaAvg();
     }
     if (sum > 0) {
-    return Math.floor((sum / this.ratingCriterias.length) * 100) / 100;
+      return Math.floor((sum / this.ratingCriterias.length) * 100) / 100;
+    }
+    else {
+      return "Not able to calculate average"
+    }
   }
-  else {
-    return "Not able to calculate average"
-  }
-}
 }
 
 // END BLOCK
@@ -79,19 +89,19 @@ class RatingCriteria {
       sum += rating.ratingValue;
     }
     if (sum > 0) {
-    return Math.floor((sum / this.ratings.length) * 100) / 100; // variable that get immediately returned
+      return Math.floor((sum / this.ratings.length) * 100) / 100;
+    }
+    else {
+      return "Not yet rated"
+    }
   }
-  else {
-    return "Not yet rated"
-  }
-}
   // Checks if the userRating is valid and push it into the rating's array
   addRating(userRating) {
     userRating.ratingValue = parseInt(userRating.ratingValue) // Converting value to number
-    if (userRating.ratingValue != "" 
-    && userRating.ratingValue != NaN 
-    && userRating.ratingValue > 0 
-    && userRating.ratingValue <= 5) { //Check if input is not empty and is a number between 1 and 5
+    if (userRating.ratingValue != ""
+      && userRating.ratingValue != NaN
+      && userRating.ratingValue > 0
+      && userRating.ratingValue <= 5) { //Check if input is not empty and is a number between 1 and 5
       this.ratings.push(userRating);
     }
   }

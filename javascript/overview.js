@@ -20,7 +20,7 @@ for (i = 0; i < electives.length; i++) {
 /* BLOCK OF CODE FOR THE ELEMENTS ON THE WEBSITE */
 
 // Loading the current user
-currentUser = JSON.parse(localStorage.getItem('currentUser'));
+let currentUser = JSON.parse(localStorage.getItem('currentUser'));
 if (currentUser === null) {
   alert("You need to login")
   window.location.assign("./login.html");
@@ -33,15 +33,13 @@ document.getElementById('logout-btn').onclick = function () {
 }
 
 // Load ratings from localStorage
-var savedRatings = []
-overallRatings = JSON.parse(localStorage.getItem('overallratings'));
+let savedRatings = []
+let overallRatings = JSON.parse(localStorage.getItem('overallratings'));
 if (overallRatings !== null) {
   for (let i = 0; i < overallRatings.length; i++) {
     savedRatings[i] = new Elective(overallRatings[i].electiveName)
-
     for (let u = 0; u < overallRatings[i].ratingCriterias.length; u++) {
       savedRatings[i].ratingCriterias.push(new RatingCriteria(overallRatings[i].ratingCriterias[u].criteriaName))
-
       for (y = 0; y < overallRatings[i].ratingCriterias[u].ratings.length; y++) {
         let user = overallRatings[i].ratingCriterias[u].ratings[y].user;
         savedRatings[i].ratingCriterias[u].ratings.push(new Rating(new User(user.firstName, user.lastName, user.username, user.password), overallRatings[i].ratingCriterias[u].ratings[y].ratingValue))
@@ -49,18 +47,14 @@ if (overallRatings !== null) {
     }
   }
   // A submit button to save ratings inside localStorage
-  document.getElementById('submit-btn').onclick = function () {
-    saveToLocalStorage(savedRatings)
-  }
+  saveToLocalStorage(savedRatings)
 }
 else {
-  document.getElementById('submit-btn').onclick = function () {
-    saveToLocalStorage(electives)
-  }
+  saveToLocalStorage(electives)
 }
 
 // Generate the input tables
-var inputTable = "";
+let inputTable = "";
 
 for (const elective of electives) {
   inputTable += elective.generateEditTable();
@@ -68,7 +62,7 @@ for (const elective of electives) {
 document.getElementById('tableContent').innerHTML = inputTable;
 
 // Generate the fixed tables with average values  
-var fixedTable = "";
+let fixedTable = "";
 for (const savedRating of savedRatings) {
   fixedTable += savedRating.generateFixedTable()
 }
@@ -78,7 +72,7 @@ document.getElementById('tableContentFixed').innerHTML = fixedTable;
 
 // Creation of the third layer - pushing the ratings to the respective rating criteria
 let inputs = document.getElementsByClassName("inputbox");
-  
+
 for (const input of inputs) {
   input.addEventListener("blur", function (event) {
     var tableElectiveName = event.target.dataset.elective;
@@ -89,8 +83,7 @@ for (const input of inputs) {
           if (ratingCriteria.criteriaName == tableRatingCriteriaName
             && event.target.value.length > 0
             && event.target.value.length < 2) {
-            let jsonUser = JSON.parse(localStorage.getItem('currentUser'));
-            let user = new User(jsonUser.firstName, jsonUser.lastName, jsonUser.username, jsonUser.password);
+            let user = new User(currentUser.firstName, currentUser.lastName, currentUser.username, currentUser.password);
             ratingCriteria.addRating(new Rating(user, event.target.value));
           }
         }
@@ -101,18 +94,20 @@ for (const input of inputs) {
 
 // Function to save arrays to localStorage that behaves differently for savedRatings
 function saveToLocalStorage(arrayName) {
-  for (let i = 0; i < electives.length; i++) {
-    for (let u = 0; u < ratingCriterias.length; u++) {
-      if (electives[i].ratingCriterias[u].ratings.length > 0 && electives[i].ratingCriterias[u].ratings !== undefined) {
-        if (arrayName == savedRatings) {
-          arrayName[i].ratingCriterias[u].ratings.push(electives[i].ratingCriterias[u].ratings[0])
-          localStorage.setItem('overallratings', JSON.stringify(arrayName));
-        }
-        else {
-          localStorage.setItem('overallratings', JSON.stringify(arrayName));
+  document.getElementById('submit-btn').onclick = function () {
+    for (let i = 0; i < electives.length; i++) {
+      for (let u = 0; u < ratingCriterias.length; u++) {
+        if (electives[i].ratingCriterias[u].ratings.length > 0 && electives[i].ratingCriterias[u].ratings !== undefined) {
+          if (arrayName == savedRatings) {
+            arrayName[i].ratingCriterias[u].ratings.push(electives[i].ratingCriterias[u].ratings[0])
+            localStorage.setItem('overallratings', JSON.stringify(arrayName));
+          }
+          else {
+            localStorage.setItem('overallratings', JSON.stringify(arrayName));
+          }
         }
       }
     }
+    document.location.reload(true)
   }
-  document.location.reload(true)
 }
