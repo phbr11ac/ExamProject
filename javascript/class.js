@@ -64,12 +64,12 @@ class Elective {
     let sum = 0;
     for (i = 0; i < this.ratingCriterias.length; i++) {
       sum += this.ratingCriterias[i].calculateRatingCriteriaAvg();
-    }
+    } 
     if (sum > 0) {
       return Math.floor((sum / this.ratingCriterias.length) * 100) / 100;
     }
     else {
-      return "Not able to calculate average"
+      return "N/A"
     }
   }
 }
@@ -92,7 +92,7 @@ class RatingCriteria {
       return Math.floor((sum / this.ratings.length) * 100) / 100;
     }
     else {
-      return "Not yet rated"
+      return " "
     }
   }
   // Checks if the userRating is valid and push it into the rating's array

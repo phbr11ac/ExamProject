@@ -39,7 +39,7 @@ if (overallRatings !== null) {
   for (let i = 0; i < overallRatings.length; i++) {
     savedRatings[i] = new Elective(overallRatings[i].electiveName)
     for (let u = 0; u < overallRatings[i].ratingCriterias.length; u++) {
-      savedRatings[i].ratingCriterias.push(new RatingCriteria(overallRatings[i].ratingCriterias[u].criteriaName))
+      savedRatings[i].addRatingCriteria(new RatingCriteria(overallRatings[i].ratingCriterias[u].criteriaName))
       for (y = 0; y < overallRatings[i].ratingCriterias[u].ratings.length; y++) {
         let user = overallRatings[i].ratingCriterias[u].ratings[y].user;
         savedRatings[i].ratingCriterias[u].ratings.push(new Rating(new User(user.firstName, user.lastName, user.username, user.password), overallRatings[i].ratingCriterias[u].ratings[y].ratingValue))
@@ -55,13 +55,13 @@ else {
 
 // Generate the input tables
 let inputTable = "";
-
 for (const elective of electives) {
   inputTable += elective.generateEditTable();
 }
 document.getElementById('tableContent').innerHTML = inputTable;
 
 // Generate the fixed tables with average values  
+
 let fixedTable = "";
 for (const savedRating of savedRatings) {
   fixedTable += savedRating.generateFixedTable()
